@@ -1,0 +1,101 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bart Community</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 40px 20px;
+      background: #0b0b14;
+      color: #f5f3ff;
+      font-family: Arial, sans-serif;
+    }
+    main { max-width: 850px; margin: auto; }
+    header, section {
+      background: #151426;
+      border: 1px solid #393052;
+      border-radius: 18px;
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+    h1, span { color: #a78bfa; }
+    .coins { color: #facc15; }
+    button {
+      padding: 12px 18px;
+      border: 0;
+      border-radius: 10px;
+      background: #7c3aed;
+      color: white;
+      cursor: pointer;
+    }
+    input {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #70618f;
+      margin: 8px 0;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>🟣 BART COMMUNITY</h1>
+    <p>Twoja społeczność. Twoje zasady.</p>
+    <p class="coins">🪙 Bart Coins: <span id="coins">0</span></p>
+  </header>
+
+  <section>
+    <h2>👤 Twój profil</h2>
+    <label for="nick">Twój nick:</label><br>
+    <input id="nick" maxlength="20" placeholder="Wpisz swój nick">
+    <button onclick="zapiszProfil()">Zapisz profil</button>
+    <p id="wynik">Utwórz swój profil!</p>
+  </section>
+
+  <section>
+    <h2>☑ Zadanie: ustaw nick</h2>
+    <p>Wpisz nick i zapisz profil, aby odebrać nagrodę.</p>
+    <p id="status">Status: nieukończone</p>
+  </section>
+</main>
+
+<script>
+  let dane = JSON.parse(localStorage.getItem("bartStart") || "{}");
+  let coins = dane.coins || 0;
+
+  document.getElementById("coins").textContent = coins;
+  document.getElementById("nick").value = dane.nick || "";
+
+  function zapiszProfil() {
+    const nick = document.getElementById("nick").value.trim();
+
+    if (nick.length < 3) {
+      alert("Nick musi mieć co najmniej 3 znaki!");
+      return;
+    }
+
+    if (!dane.zadanieNick) {
+      coins += 10;
+      dane.zadanieNick = true;
+      document.getElementById("status").textContent =
+        "Status: ukończone! Otrzymujesz 10 Bart Coins.";
+    } else {
+      document.getElementById("status").textContent =
+        "Status: ukończone wcześniej.";
+    }
+
+    dane.nick = nick;
+    dane.coins = coins;
+    localStorage.setItem("bartStart", JSON.stringify(dane));
+
+    document.getElementById("coins").textContent = coins;
+    document.getElementById("wynik").textContent =
+      "Witaj w Bart Community, " + nick + "!";
+  }
+</script>
+</body>
+</html>
