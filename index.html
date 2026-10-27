@@ -320,7 +320,25 @@ function buy(id){
  data.coins-=p.price;data.bought.push(id);data.history.unshift("Kupiono: "+p.name);
  persist();refresh();toast("Kupiono: "+p.name);
 }
-function renderRanking(){
+function 
+function renderRanking() {
+  const rows = [{
+    nick: data.nick,
+    coins: data.coins,
+    level: Math.floor(data.xp / 100) + 1,
+    avatar: data.avatar
+  }];
+
+  document.getElementById("rankingRows").innerHTML = rows.map((r, i) => `
+    <tr>
+      <td>${i + 1}</td>
+      <td>${escapeHtml(r.avatar)} ${escapeHtml(r.nick)} <span class="pill">Ty</span></td>
+      <td>${r.level}</td>
+      <td>🪙 ${r.coins}</td>
+    </tr>
+  `).join("");
+}
+renderRanking(){
  const rows=[{nick:"KacperGaming",coins:5420,level:18},{nick:"Natalia_10",coins:4980,level:16},{nick:"SzymonPL",coins:4750,level:15},{nick:"ToxicBoy",coins:4320,level:14},{nick:data.nick,coins:data.coins,level:Math.floor(data.xp/100)+1}].sort((a,b)=>b.coins-a.coins);
  document.getElementById("rankingRows").innerHTML=rows.map((r,i)=>`<tr><td>${i+1}</td><td>${r.nick===data.nick?data.avatar+" ":""}${escapeHtml(r.nick)}</td><td>${r.level}</td><td>🪙 ${r.coins}</td></tr>`).join("");
 }
