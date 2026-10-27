@@ -2,100 +2,440 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bart Community</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      padding: 40px 20px;
-      background: #0b0b14;
-      color: #f5f3ff;
-      font-family: Arial, sans-serif;
-    }
-    main { max-width: 850px; margin: auto; }
-    header, section {
-      background: #151426;
-      border: 1px solid #393052;
-      border-radius: 18px;
-      padding: 25px;
-      margin-bottom: 20px;
-    }
-    h1, span { color: #a78bfa; }
-    .coins { color: #facc15; }
-    button {
-      padding: 12px 18px;
-      border: 0;
-      border-radius: 10px;
-      background: #7c3aed;
-      color: white;
-      cursor: pointer;
-    }
-    input {
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #70618f;
-      margin: 8px 0;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bart Community — Gaming Hub</title>
+<style>
+:root {
+  --bg:#070914; --panel:#101426; --panel2:#151a30;
+  --line:#262d4b; --purple:#8b5cf6; --blue:#38bdf8;
+  --text:#f4f5ff; --muted:#929bb9; --gold:#facc15;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:15px Arial,sans-serif}
+button,input,textarea,select{font:inherit}
+button{cursor:pointer;transition:.2s}
+button:hover{filter:brightness(1.2);transform:translateY(-1px)}
+button:disabled{opacity:.5;cursor:not-allowed}
+.app{display:grid;grid-template-columns:220px minmax(0,1fr);min-height:100vh}
+.sidebar{background:#0b0e1b;border-right:1px solid var(--line);padding:22px 14px;position:sticky;top:0;height:100vh}
+.logo{font-size:22px;font-weight:900;color:#c4b5fd;padding:10px;margin-bottom:25px}
+.logo span{display:block;font-size:10px;letter-spacing:4px;color:var(--muted);margin-top:5px}
+.nav{display:grid;gap:7px}
+.nav button{padding:13px;text-align:left;background:transparent;color:#b8bfd9;border:1px solid transparent;border-radius:10px}
+.nav button.active,.nav button:hover{background:#21173f;border-color:#5633a1;color:white}
+.sidecard,.card{background:linear-gradient(145deg,#12182b,#0d1120);border:1px solid var(--line);border-radius:16px;padding:18px}
+.sidecard{margin-top:25px}
+.coins{color:var(--gold);font-weight:bold;font-size:22px;margin:12px 0}
+.muted{color:var(--muted)}
+main{min-width:0;padding:24px}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:24px}
+.topbar input{max-width:430px;width:100%}
+input,textarea,select{background:#090d1b;border:1px solid #343b5c;border-radius:9px;padding:12px;color:white;width:100%;outline:none}
+input:focus,textarea:focus{border-color:var(--purple)}
+button.primary{background:linear-gradient(110deg,#6d28d9,#9333ea);color:white;border:0;border-radius:10px;padding:12px 17px;font-weight:bold}
+button.secondary{background:#1a2036;color:white;border:1px solid #343b5c;border-radius:10px;padding:10px 14px}
+.hero{display:grid;grid-template-columns:1.5fr 1fr;align-items:center;gap:20px;padding:30px;background:radial-gradient(ellipse at 85% 10%,#422078 0,transparent 45%),linear-gradient(125deg,#17152e,#0b1124);border:1px solid #4c3479;border-radius:20px;margin-bottom:22px;overflow:hidden}
+.eyebrow{color:#c4b5fd;font-size:11px;letter-spacing:2px;font-weight:bold}
+h1{font-size:clamp(26px,3vw,40px);margin:12px 0}
+h1 span,.accent{color:#b79aff}
+.hero p,.muted{line-height:1.6}
+.hero-art{text-align:center;font-size:100px;filter:drop-shadow(0 0 25px #8b5cf6)}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:26px 0 13px}
+.section-title h2{margin:0;font-size:20px}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:22px}
+.stat{padding:17px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+.stat small{color:var(--muted)}
+.stat h2{font-size:26px;margin:12px 0 4px}
+.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
+.card{min-width:0}
+.card h3{margin:8px 0}
+.card p{color:var(--muted);line-height:1.5;font-size:13px}
+.icon{font-size:26px}
+.reward{color:var(--gold);font-size:13px;font-weight:bold;margin:14px 0}
+.progress{height:7px;border-radius:20px;background:#252b43;overflow:hidden;margin:12px 0}
+.progress div{height:100%;background:linear-gradient(90deg,#7c3aed,#38bdf8);border-radius:20px}
+.page{display:none}
+.page.active{display:block}
+.profile-row{display:flex;align-items:center;gap:16px}
+.avatar{width:68px;height:68px;border-radius:20px;background:#25204a;display:grid;place-items:center;font-size:35px;border:1px solid #7652c9}
+.form{display:grid;gap:12px;margin-top:20px}
+label{font-size:13px;color:#c5cbe0}
+.row{display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-block;background:#202644;color:#bda8ff;padding:6px 10px;border-radius:20px;font-size:12px}
+table{width:100%;border-collapse:collapse}
+td,th{text-align:left;padding:13px 8px;border-bottom:1px solid var(--line)}
+th{color:var(--muted);font-size:12px}
+.gamebox{text-align:center}
+canvas{display:block;width:min(100%,400px);height:auto;margin:15px auto;background:#070b16;border:1px solid #394264;border-radius:10px;touch-action:none}
+.mobile-controls{display:grid;grid-template-columns:repeat(3,55px);justify-content:center;gap:5px;margin:10px}
+.mobile-controls button{height:42px}
+.post{padding:16px 0;border-bottom:1px solid var(--line)}
+.notice{padding:13px;border-radius:10px;background:#1b1631;color:#c4b5fd;margin:12px 0;font-size:13px}
+footer{padding:30px 0;color:var(--muted);font-size:12px;text-align:center}
+#toast{position:fixed;bottom:20px;right:20px;background:#282044;border:1px solid #8960df;padding:14px 18px;border-radius:12px;display:none;z-index:10}
+@media(max-width:1000px){.stats{grid-template-columns:repeat(2,minmax(0,1fr))}.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{grid-template-columns:1fr}.hero-art{display:none}}
+@media(max-width:650px){
+ .app{display:block}.sidebar{position:static;height:auto;padding:10px;border-right:0;border-bottom:1px solid var(--line)}
+ .logo{margin:0;padding:8px}.logo span{display:inline;margin-left:8px}
+ .nav{display:flex;overflow-x:auto;gap:5px}.nav button{white-space:nowrap;padding:10px;font-size:12px}
+ .sidecard{display:none}main{padding:13px}.topbar{align-items:flex-start;flex-direction:column}
+ .stats{grid-template-columns:repeat(2,minmax(0,1fr))}.grid3,.grid2{grid-template-columns:1fr}
+ .hero{padding:21px}.hero h1{font-size:29px}.stat h2{font-size:22px}
+}
+</style>
 </head>
 <body>
+<div class="app">
+<aside class="sidebar">
+  <div class="logo">◈ BART<span>COMMUNITY HUB</span></div>
+  <nav class="nav">
+    <button class="active" onclick="go('home',this)">⌂ Strona główna</button>
+    <button onclick="go('profile',this)">👤 Profil</button>
+    <button onclick="go('tasks',this)">☑ Zadania</button>
+    <button onclick="go('games',this)">🎮 Gry</button>
+    <button onclick="go('shop',this)">🛒 Sklep</button>
+    <button onclick="go('ranking',this)">🏆 Ranking</button>
+    <button onclick="go('community',this)">💬 Społeczność</button>
+    <button onclick="go('settings',this)">⚙ Ustawienia</button>
+  </nav>
+  <div class="sidecard">
+    <div class="muted">🪙 TWOJE SALDO</div>
+    <div class="coins"><span class="coin-count">0</span> BC</div>
+    <div class="muted">Poziom <b id="sideLevel">1</b></div>
+    <div class="progress"><div id="sideXp" style="width:0%"></div></div>
+    <small class="muted" id="sideXpText">0 / 100 XP</small>
+  </div>
+</aside>
+
 <main>
-  <header>
-    <h1>🟣 BART COMMUNITY</h1>
-    <p>Twoja społeczność. Twoje zasady.</p>
-    <p class="coins">🪙 Bart Coins: <span id="coins">0</span></p>
-  </header>
+  <div class="topbar">
+    <input id="search" placeholder="🔎 Szukaj w Bart Community..." onkeydown="if(event.key==='Enter')searchSite()">
+    <div class="row"><span>🔔</span><span id="topAvatar">😎</span><b id="topNick">BartUser</b></div>
+  </div>
 
-  <section>
-    <h2>👤 Twój profil</h2>
-    <label for="nick">Twój nick:</label><br>
-    <input id="nick" maxlength="20" placeholder="Wpisz swój nick">
-    <button onclick="zapiszProfil()">Zapisz profil</button>
-    <p id="wynik">Utwórz swój profil!</p>
+  <section id="home" class="page active">
+    <div class="hero">
+      <div>
+        <div class="eyebrow">✦ TWOJE MIEJSCE W SIECI</div>
+        <h1>Witaj w <span>Bart Community!</span></h1>
+        <p>Twórz swój profil, wykonuj zadania, graj w mini-gry i zdobywaj Bart Coins. Wbijaj poziomy i buduj swoją pozycję!</p>
+        <div class="row">
+          <button class="primary" onclick="go('games')">🎮 Zagraj teraz</button>
+          <button class="secondary" onclick="go('tasks')">Zobacz zadania →</button>
+        </div>
+      </div>
+      <div class="hero-art">👾<div style="font-size:15px;color:#d7c6ff">LEVEL UP YOUR GAME</div></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><small>🪙 BART COINS</small><h2 class="coin-count">0</h2><small>Twoje saldo</small></div>
+      <div class="stat"><small>⭐ POZIOM</small><h2 id="level">1</h2><small id="levelName">Początkujący</small></div>
+      <div class="stat"><small>☑ ZADANIA</small><h2 id="taskCount">0/5</h2><small>Ukończone</small></div>
+      <div class="stat"><small>🎮 REKORD SNAKE</small><h2 id="bestScore">0</h2><small>Najlepszy wynik</small></div>
+    </div>
+    <div class="section-title"><h2>Twoje wyzwania</h2><button class="secondary" onclick="go('tasks')">Wszystkie →</button></div>
+    <div class="grid3" id="homeTasks"></div>
+    <div class="section-title"><h2>Graj i zdobywaj</h2></div>
+    <div class="grid3">
+      <div class="card"><div class="icon">🐍</div><h3>Snake</h3><p>Zbieraj punkty, unikaj ścian i pobij swój rekord.</p><button class="primary" onclick="go('games')">Zagraj →</button></div>
+      <div class="card"><div class="icon">🧠</div><h3>Quiz</h3><p>Quiz wiedzy pojawi się w kolejnej aktualizacji.</p><span class="pill">Wkrótce</span></div>
+      <div class="card"><div class="icon">⭕</div><h3>Kółko i krzyżyk</h3><p>Kolejna mini-gra do rywalizacji ze znajomymi.</p><span class="pill">Wkrótce</span></div>
+    </div>
+    <div class="section-title"><h2>Ostatnia aktywność</h2></div>
+    <div class="card" id="activity"></div>
   </section>
 
-  <section>
-    <h2>☑ Zadanie: ustaw nick</h2>
-    <p>Wpisz nick i zapisz profil, aby odebrać nagrodę.</p>
-    <p id="status">Status: nieukończone</p>
+  <section id="profile" class="page">
+    <div class="section-title"><h2>👤 Twój profil</h2><span class="pill">Twoje konto lokalne</span></div>
+    <div class="card">
+      <div class="profile-row"><div class="avatar" id="bigAvatar">😎</div><div><h2 id="profileNick">BartUser</h2><span class="pill" id="profileLevel">Poziom 1</span><p class="muted">Członek Bart Community</p></div></div>
+      <div class="form">
+        <label for="nick">Nick (3–20 znaków)</label><input id="nick" maxlength="20" placeholder="Twój nick">
+        <label for="bio">Opis profilu (minimum 10 znaków)</label><textarea id="bio" rows="3" maxlength="180" placeholder="Napisz coś o sobie..."></textarea>
+        <label for="avatar">Wybierz awatar</label>
+        <select id="avatar"><option>😎</option><option>👾</option><option>🦊</option><option>🐸</option><option>🐼</option><option>🐲</option><option>🤖</option><option>👑</option></select>
+        <button class="primary" onclick="saveProfile()">Zapisz profil</button>
+      </div>
+    </div>
   </section>
+
+  <section id="tasks" class="page">
+    <div class="section-title"><h2>☑ Centrum zadań</h2><span class="pill">Nagrody w BC</span></div>
+    <p class="muted">Wykonaj wymagane działanie, a zadanie zaliczy się automatycznie po sprawdzeniu.</p>
+    <div class="grid2" id="allTasks"></div>
+  </section>
+
+  <section id="games" class="page">
+    <div class="section-title"><h2>🎮 Arcade</h2><span class="pill">Mini-gry</span></div>
+    <div class="grid2">
+      <div class="card gamebox">
+        <div class="icon">🐍</div><h2>Snake</h2>
+        <p>Steruj strzałkami, klawiszami WASD lub przyciskami na ekranie.</p>
+        <div class="row" style="justify-content:center"><span class="pill">Wynik: <b id="score">0</b></span><span class="pill">Rekord: <b id="gameBest">0</b></span></div>
+        <canvas id="board" width="400" height="400"></canvas>
+        <div class="row" style="justify-content:center"><button class="primary" onclick="startGame()">▶ Start / Restart</button><button class="secondary" onclick="pauseGame()">Ⅱ Pauza</button></div>
+        <div class="mobile-controls">
+          <span></span><button class="secondary" onclick="turn('up')">↑</button><span></span>
+          <button class="secondary" onclick="turn('left')">←</button><button class="secondary" onclick="turn('down')">↓</button><button class="secondary" onclick="turn('right')">→</button>
+        </div>
+        <p>Każdy zebrany owoc daje punkt. Po zakończeniu gry zdobywasz BC za nowy rekord.</p>
+      </div>
+      <div class="card">
+        <div class="icon">🏆</div><h2>Twoje osiągnięcia</h2>
+        <p>Najlepszy wynik Snake</p><h2 id="gameBestBig">0</h2>
+        <div class="progress"><div id="snakeProgress" style="width:0%"></div></div>
+        <p id="snakeHint">Zdobądź pierwszy punkt, aby ukończyć zadanie.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="shop" class="page">
+    <div class="section-title"><h2>🛒 Sklep nagród</h2><span class="pill">Saldo: <b class="coin-count">0</b> BC</span></div>
+    <div class="grid3" id="shopItems"></div>
+    <p class="muted">Przedmioty są na razie wirtualne i zapisywane lokalnie.</p>
+  </section>
+
+  <section id="ranking" class="page">
+    <div class="section-title"><h2>🏆 Ranking</h2></div>
+    <div class="notice">To lokalny ranking demonstracyjny. Prawdziwy wspólny ranking wymaga bazy danych i kont użytkowników.</div>
+    <div class="card"><table><thead><tr><th>#</th><th>Gracz</th><th>Poziom</th><th>Coins</th></tr></thead><tbody id="rankingRows"></tbody></table></div>
+  </section>
+
+  <section id="community" class="page">
+    <div class="section-title"><h2>💬 Społeczność</h2></div>
+    <div class="card"><h3>Tablica społeczności</h3><p>Dodaj wiadomość do lokalnej tablicy społeczności.</p>
+      <textarea id="postText" rows="3" maxlength="250" placeholder="Co u Ciebie?"></textarea>
+      <p><button class="primary" onclick="addPost()">Opublikuj wpis</button></p>
+      <div id="posts"></div>
+    </div>
+  </section>
+
+  <section id="settings" class="page">
+    <div class="section-title"><h2>⚙ Ustawienia</h2></div>
+    <div class="card">
+      <h3>Wygląd strony</h3><p>Wybierz preferowany motyw.</p>
+      <button class="primary" onclick="setTheme('dark')">🌙 Ciemny</button>
+      <button class="secondary" onclick="setTheme('light')">☀ Jasny</button>
+      <hr style="border-color:var(--line);margin:25px 0">
+      <h3>Twoje dane</h3><p>Postęp jest przechowywany w tej przeglądarce.</p>
+      <button class="secondary" onclick="exportData()">Pobierz kopię danych</button>
+      <button class="secondary" onclick="resetData()">Zresetuj postęp</button>
+    </div>
+  </section>
+  <footer>BART COMMUNITY · WERSJA DEMO · Zbuduj swój poziom. Graj fair.</footer>
 </main>
+</div>
+<div id="toast"></div>
 
 <script>
-  let dane = JSON.parse(localStorage.getItem("bartStart") || "{}");
-  let coins = dane.coins || 0;
+const taskDefs = [
+ {id:"profile",title:"Uzupełnij profil",desc:"Zapisz nick i opis profilu.",reward:20,icon:"👤"},
+ {id:"avatar",title:"Wybierz awatar",desc:"Wybierz awatar i zapisz profil.",reward:10,icon:"🎭"},
+ {id:"snake",title:"Zagraj w Snake",desc:"Zdobądź co najmniej 3 punkty.",reward:25,icon:"🐍"},
+ {id:"bio",title:"Opowiedz o sobie",desc:"Uzupełnij opis profilu i zapisz zmiany.",reward:15,icon:"📝"},
+ {id:"shop",title:"Odwiedź sklep",desc:"Sprawdź dostępne nagrody.",reward:5,icon:"🛒"}
+];
+const products = [
+ {id:"purple",name:"Fioletowy styl",desc:"Odblokuj styl fioletowego wojownika.",price:80,icon:"🟣"},
+ {id:"crown",name:"Korona profilu",desc:"Pokaż, że jesteś królem arcade.",price:150,icon:"👑"},
+ {id:"dragon",name:"Awatar smoka",desc:"Ognisty awatar dla odważnych.",price:100,icon:"🐲"}
+];
+const defaults = {nick:"BartUser",bio:"Nowy członek Bart Community!",avatar:"😎",coins:0,xp:0,done:[],history:[],best:0,posts:[],bought:[],theme:"dark",visitedShop:false,profileSaved:false};
+let data;
+try { data={...defaults,...JSON.parse(localStorage.getItem("bartCommunityPro")||"{}")}; }
+catch(e){data={...defaults};}
+function persist(){localStorage.setItem("bartCommunityPro",JSON.stringify(data));}
+function toast(msg){const t=document.getElementById("toast");t.textContent=msg;t.style.display="block";setTimeout(()=>t.style.display="none",2600);}
+function go(page,btn){
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ document.getElementById(page).classList.add("active");
+ document.querySelectorAll(".nav button").forEach(b=>b.classList.remove("active"));
+ if(btn)btn.classList.add("active");
+ else document.querySelectorAll(".nav button").forEach(b=>{if(b.getAttribute("onclick").includes("'"+page+"'"))b.classList.add("active");});
+ if(page==="shop"){data.visitedShop=true;checkTasks();}
+ if(page==="games")drawBoard();
+ refresh();
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+function award(id){
+ const t=taskDefs.find(x=>x.id===id);
+ if(!t||data.done.includes(id))return;
+ data.done.push(id);data.coins+=t.reward;data.xp+=t.reward;
+ data.history.unshift("Ukończono: "+t.title+" (+"+t.reward+" BC)");
+ persist();toast("Zadanie ukończone! +"+t.reward+" Bart Coins");refresh();
+}
+function checkTasks(){
+ if(data.profileSaved && data.nick.trim().length>=3 && data.bio.trim().length>=10)award("profile");
+ if(data.profileSaved && data.avatar)award("avatar");
+ if(data.profileSaved && data.bio.trim().length>=10)award("bio");
+ if(data.visitedShop)award("shop");
+ if(data.best>=3)award("snake");
+}
+function saveProfile(){
+ const nick=document.getElementById("nick").value.trim();
+ const bio=document.getElementById("bio").value.trim();
+ const avatar=document.getElementById("avatar").value;
+ if(nick.length<3||nick.length>20){toast("Nick musi mieć od 3 do 20 znaków.");return;}
+ if(bio.length<10){toast("Opis musi mieć co najmniej 10 znaków.");return;}
+ data.nick=nick;data.bio=bio;data.avatar=avatar;data.profileSaved=true;
+ persist();checkTasks();refresh();toast("Profil zapisany!");
+}
+function refresh(){
+ const level=Math.floor(data.xp/100)+1;
+ document.querySelectorAll(".coin-count").forEach(e=>e.textContent=data.coins);
+ document.getElementById("level").textContent=level;
+ document.getElementById("sideLevel").textContent=level;
+ document.getElementById("levelName").textContent=level>=10?"Legenda":level>=5?"Ekspert":level>=3?"Aktywny":"Początkujący";
+ document.getElementById("sideXp").style.width=(data.xp%100)+"%";
+ document.getElementById("sideXpText").textContent=(data.xp%100)+" / 100 XP";
+ document.getElementById("taskCount").textContent=data.done.length+"/"+taskDefs.length;
+ document.getElementById("bestScore").textContent=data.best;
+ document.getElementById("gameBest").textContent=data.best;
+ document.getElementById("gameBestBig").textContent=data.best;
+ document.getElementById("snakeProgress").style.width=Math.min(100,data.best/3*100)+"%";
+ document.getElementById("snakeHint").textContent=data.best>=3?"Wyzwanie Snake ukończone!":"Potrzebujesz jeszcze "+Math.max(0,3-data.best)+" punktów do zadania.";
+ document.getElementById("topNick").textContent=data.nick;
+ document.getElementById("topAvatar").textContent=data.avatar;
+ document.getElementById("profileNick").textContent=data.nick;
+ document.getElementById("profileLevel").textContent="Poziom "+level;
+ document.getElementById("bigAvatar").textContent=data.avatar;
+ document.getElementById("nick").value=data.nick;
+ document.getElementById("bio").value=data.bio;
+ document.getElementById("avatar").value=data.avatar;
+ renderTasks();renderShop();renderRanking();renderPosts();renderActivity();
+ persist();
+}
+function renderTasks(){
+ const html=taskDefs.map(t=>`<div class="card"><div class="icon">${t.icon}</div><h3>${t.title}</h3><p>${t.desc}</p><div class="reward">🪙 +${t.reward} BC</div><span class="pill">${data.done.includes(t.id)?"✓ Ukończono":"Do wykonania"}</span></div>`).join("");
+ document.getElementById("allTasks").innerHTML=html;
+ document.getElementById("homeTasks").innerHTML=taskDefs.slice(0,3).map(t=>`<div class="card"><div class="icon">${t.icon}</div><h3>${t.title}</h3><p>${t.desc}</p><div class="reward">🪙 +${t.reward} BC</div><span class="pill">${data.done.includes(t.id)?"✓ Ukończono":"Wyzwanie"}</span></div>`).join("");
+}
+function renderShop(){
+ document.getElementById("shopItems").innerHTML=products.map(p=>`<div class="card"><div class="icon">${p.icon}</div><h3>${p.name}</h3><p>${p.desc}</p><div class="reward">🪙 ${p.price} BC</div><button class="${data.bought.includes(p.id)?"secondary":"primary"}" ${data.bought.includes(p.id)?"disabled":""} onclick="buy('${p.id}')">${data.bought.includes(p.id)?"Kupiono":"Kup nagrodę"}</button></div>`).join("");
+}
+function buy(id){
+ const p=products.find(x=>x.id===id);if(!p||data.bought.includes(id))return;
+ if(data.coins<p.price){toast("Masz za mało Bart Coins!");return;}
+ data.coins-=p.price;data.bought.push(id);data.history.unshift("Kupiono: "+p.name);
+ persist();refresh();toast("Kupiono: "+p.name);
+}
+function renderRanking(){
+ const rows=[{nick:"KacperGaming",coins:5420,level:18},{nick:"Natalia_10",coins:4980,level:16},{nick:"SzymonPL",coins:4750,level:15},{nick:"ToxicBoy",coins:4320,level:14},{nick:data.nick,coins:data.coins,level:Math.floor(data.xp/100)+1}].sort((a,b)=>b.coins-a.coins);
+ document.getElementById("rankingRows").innerHTML=rows.map((r,i)=>`<tr><td>${i+1}</td><td>${r.nick===data.nick?data.avatar+" ":""}${escapeHtml(r.nick)}</td><td>${r.level}</td><td>🪙 ${r.coins}</td></tr>`).join("");
+}
+function renderActivity(){
+ const arr=data.history.slice(0,5);
+ document.getElementById("activity").innerHTML=arr.length?arr.map(x=>`<div class="post">✦ ${escapeHtml(x)}</div>`).join(""):'<p class="muted">Brak aktywności. Wykonaj zadanie lub zagraj w Snake!</p>';
+}
+function renderPosts(){
+ document.getElementById("posts").innerHTML=data.posts.slice().reverse().map(p=>`<div class="post"><b>${escapeHtml(p.nick)}</b><p>${escapeHtml(p.text)}</p><small class="muted">${escapeHtml(p.date)}</small></div>`).join("")||'<p class="muted">Nie ma jeszcze wpisów.</p>';
+}
+function addPost(){
+ const text=document.getElementById("postText").value.trim();
+ if(text.length<2){toast("Napisz trochę więcej!");return;}
+ data.posts.push({nick:data.nick,text,date:new Date().toLocaleString("pl-PL")});
+ data.history.unshift("Dodano wpis społeczności");document.getElementById("postText").value="";
+ persist();refresh();toast("Dodano wpis!");
+}
+function setTheme(theme){
+ data.theme=theme;
+ if(theme==="light"){
+ document.documentElement.style.setProperty("--bg","#f1f2fa");
+ document.documentElement.style.setProperty("--panel","#ffffff");
+ document.documentElement.style.setProperty("--panel2","#e7e9f6");
+ document.documentElement.style.setProperty("--line","#d0d4e6");
+ document.documentElement.style.setProperty("--text","#19182b");
+ document.documentElement.style.setProperty("--muted","#626b85");
+ }else{
+ document.documentElement.style.setProperty("--bg","#070914");
+ document.documentElement.style.setProperty("--panel","#101426");
+ document.documentElement.style.setProperty("--panel2","#151a30");
+ document.documentElement.style.setProperty("--line","#262d4b");
+ document.documentElement.style.setProperty("--text","#f4f5ff");
+ document.documentElement.style.setProperty("--muted","#929bb9");
+ }
+ persist();toast("Zmieniono motyw.");
+}
+function resetData(){
+ if(!confirm("Na pewno usunąć lokalny postęp i saldo?"))return;
+ localStorage.removeItem("bartCommunityPro");location.reload();
+}
+function exportData(){
+ const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});
+ const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="bart-community-backup.json";a.click();URL.revokeObjectURL(a.href);
+}
+function searchSite(){
+ const q=document.getElementById("search").value.toLowerCase();
+ const map=[["profil","profile"],["zad","tasks"],["snake","games"],["gr","games"],["sklep","shop"],["rank","ranking"],["społ","community"],["ustaw","settings"]];
+ const match=map.find(x=>x[0].includes(q)||q.includes(x[0]));
+ if(match)go(match[1]);else toast("Nie znaleziono sekcji. Spróbuj: profil, zadania, gry, sklep.");
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));}
 
-  document.getElementById("coins").textContent = coins;
-  document.getElementById("nick").value = dane.nick || "";
-
-  function zapiszProfil() {
-    const nick = document.getElementById("nick").value.trim();
-
-    if (nick.length < 3) {
-      alert("Nick musi mieć co najmniej 3 znaki!");
-      return;
-    }
-
-    if (!dane.zadanieNick) {
-      coins += 10;
-      dane.zadanieNick = true;
-      document.getElementById("status").textContent =
-        "Status: ukończone! Otrzymujesz 10 Bart Coins.";
-    } else {
-      document.getElementById("status").textContent =
-        "Status: ukończone wcześniej.";
-    }
-
-    dane.nick = nick;
-    dane.coins = coins;
-    localStorage.setItem("bartStart", JSON.stringify(dane));
-
-    document.getElementById("coins").textContent = coins;
-    document.getElementById("wynik").textContent =
-      "Witaj w Bart Community, " + nick + "!";
-  }
+/* SNAKE */
+const canvas=document.getElementById("board"),ctx=canvas.getContext("2d");
+const cell=20,units=20;
+let snake,food,dir,nextDir,score,timer,running=false,paused=false;
+function resetSnake(){
+ snake=[{x:8,y:10},{x:7,y:10},{x:6,y:10}];dir="right";nextDir="right";score=0;
+ placeFood();document.getElementById("score").textContent=score;drawBoard();
+}
+function placeFood(){
+ do{food={x:Math.floor(Math.random()*units),y:Math.floor(Math.random()*units)}}
+ while(snake&&snake.some(s=>s.x===food.x&&s.y===food.y));
+}
+function drawBoard(){
+ if(!snake)resetSnake();
+ ctx.fillStyle="#070b16";ctx.fillRect(0,0,400,400);
+ ctx.strokeStyle="#111a2c";
+ for(let i=0;i<=units;i++){ctx.beginPath();ctx.moveTo(i*cell,0);ctx.lineTo(i*cell,400);ctx.stroke();ctx.beginPath();ctx.moveTo(0,i*cell);ctx.lineTo(400,i*cell);ctx.stroke();}
+ ctx.fillStyle="#fb7185";ctx.beginPath();ctx.arc(food.x*cell+10,food.y*cell+10,7,0,Math.PI*2);ctx.fill();
+ snake.forEach((s,i)=>{ctx.fillStyle=i===0?"#a78bfa":"#34d399";ctx.fillRect(s.x*cell+2,s.y*cell+2,cell-4,cell-4)});
+ if(!running){ctx.fillStyle="#ffffff";ctx.font="bold 19px Arial";ctx.textAlign="center";ctx.fillText(score>0?"Koniec gry!":"Naciśnij Start",200,200);}
+}
+function startGame(){clearInterval(timer);resetSnake();running=true;paused=false;timer=setInterval(tick,125);drawBoard();}
+function pauseGame(){if(!running)return;paused=!paused;toast(paused?"Pauza":"Gra wznowiona");}
+function turn(d){
+ const opposite={up:"down",down:"up",left:"right",right:"left"};
+ if(d!==opposite[dir])nextDir=d;
+}
+function tick(){
+ if(!running||paused)return;
+ dir=nextDir;
+ const head={...snake[0]};
+ if(dir==="up")head.y--;if(dir==="down")head.y++;if(dir==="left")head.x--;if(dir==="right")head.x++;
+ if(head.x<0||head.x>=units||head.y<0||head.y>=units||snake.some((s,i)=>i<snake.length-1&&s.x===head.x&&s.y===head.y)){
+   running=false;clearInterval(timer);finishGame();drawBoard();return;
+ }
+ snake.unshift(head);
+ if(head.x===food.x&&head.y===food.y){score++;document.getElementById("score").textContent=score;placeFood();}
+ else snake.pop();
+ drawBoard();
+}
+function finishGame(){
+ if(score>data.best){
+   data.best=score;data.coins+=Math.max(0,score)*2;data.xp+=Math.max(0,score)*2;
+   data.history.unshift("Nowy rekord Snake: "+score+" (+"+(score*2)+" BC)");
+   toast("Nowy rekord! +"+(score*2)+" BC");
+ }
+ checkTasks();persist();refresh();
+}
+document.addEventListener("keydown",e=>{
+ const keys={ArrowUp:"up",w:"up",ArrowDown:"down",s:"down",ArrowLeft:"left",a:"left",ArrowRight:"right",d:"right"};
+ if(keys[e.key]){e.preventDefault();turn(keys[e.key]);}
+});
+let touchStart=null;
+canvas.addEventListener("touchstart",e=>{touchStart={x:e.touches[0].clientX,y:e.touches[0].clientY}},{passive:true});
+canvas.addEventListener("touchend",e=>{
+ if(!touchStart)return;
+ const dx=e.changedTouches[0].clientX-touchStart.x,dy=e.changedTouches[0].clientY-touchStart.y;
+ if(Math.abs(dx)>Math.abs(dy))turn(dx>0?"right":"left");else turn(dy>0?"down":"up");
+ touchStart=null;
+},{passive:true});
+resetSnake();
+if(data.theme==="light")setTheme("light");
+refresh();
 </script>
 </body>
 </html>
